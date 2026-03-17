@@ -44,37 +44,103 @@ npm install
 npm start
 ```
 
-### Environment Variables
+### Environment Variables Setup
 
-#### Backend (`.env`)
+#### Step 1: Backend Configuration
+
+Create a `.env` file in the `backend/` directory:
+
 ```env
+# ============================================
 # Supabase Configuration
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your_anon_key
-SUPABASE_SERVICE_KEY=your_service_key
+# ============================================
+# Get these from https://app.supabase.com
+SUPABASE_URL=https://juozmbvylgbcbpbadhxb.supabase.co
+SUPABASE_ANON_KEY=sb_publishable_YOUR_KEY_HERE
+SUPABASE_SERVICE_KEY=sb_secret_YOUR_SERVICE_KEY_HERE
 
-# OpenRouter API (for AI event extraction)
-OPENROUTER_API_KEY=your_openrouter_key
+# ============================================
+# OpenRouter API Configuration (AI Event Extraction)
+# ============================================
+# Sign up at https://openrouter.ai for free credits
+OPENROUTER_API_KEY=sk-or-v1-YOUR_API_KEY_HERE
 OPENROUTER_MODEL=openai/gpt-4o-mini
 
-# Server
+# ============================================
+# Server Configuration
+# ============================================
 PORT=5000
 NODE_ENV=development
 
+# ============================================
 # CORS Configuration
+# ============================================
+# Production (Vercel)
 FRONTEND_URL=https://campus-flow-flax.vercel.app
-# For local: FRONTEND_URL=http://localhost:5173
+# Local Development
+# FRONTEND_URL=http://localhost:5173
 
-# n8n Webhook (for reminders)
-N8N_WEBHOOK_URL=https://your-n8n-instance/webhook/reminder
+# ============================================
+# n8n Automation Webhook (WhatsApp Reminders)
+# ============================================
+# Get this from your n8n workflow
+N8N_WEBHOOK_URL=https://muhammadnavas.app.n8n.cloud/webhook/reminder
 ```
 
-#### Frontend (`.env.local`)
+#### Step 2: Frontend Configuration
+
+Create a `.env.local` file in the `frontend/` directory:
+
 ```env
+# ============================================
+# Frontend Environment Configuration
+# ============================================
+
+# API Base URL (Point to your backend)
+# Local Development
 VITE_API_URL=http://localhost:5000/api
-VITE_N8N_WEBHOOK_URL=https://your-n8n-instance/webhook/reminder
-VITE_GEMINI_API_KEY=your_gemini_key
+# Production (Render backend)
+# VITE_API_URL=https://campusflow-qas5.onrender.com/api
+
+# ============================================
+# n8n Webhook URL (Event Processing)
+# ============================================
+VITE_N8N_WEBHOOK_URL=https://muhammadnavas.app.n8n.cloud/webhook/reminder
+
+# ============================================
+# Gemini API Key (Optional - for backup AI)
+# ============================================
+VITE_GEMINI_API_KEY=AIzaSy_YOUR_GEMINI_KEY_HERE
 ```
+
+---
+
+## 🔧 Getting API Keys
+
+### 1. **Supabase** (Database & Auth)
+- Go to [supabase.com](https://app.supabase.com)
+- Create a new project
+- Copy `Project URL`, `Anon Key`, and `Service Key`
+- Paste in backend `.env`
+
+### 2. **OpenRouter** (AI Event Extraction)
+- Visit [openrouter.ai](https://openrouter.ai)
+- Sign up and login
+- Generate API key
+- Get free $5 credits for testing
+- Paste in backend `.env`
+
+### 3. **n8n** (Automation & WhatsApp)
+- Create account at [n8n.io](https://n8n.io)
+- Set up WhatsApp integration workflow
+- Deploy and get webhook URL
+- Paste in both `.env` files
+
+### 4. **Google Calendar API** (Optional)
+- [Google Cloud Console](https://console.cloud.google.com)
+- Enable Google Calendar API
+- Create OAuth 2.0 credentials
+- (Currently handled via frontend)
 
 ---
 
