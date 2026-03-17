@@ -303,9 +303,16 @@ For issues and questions:
 
 ## 👥 Team
 
-- **Designer & Developer**: Muhammad Navas
-- **AI Integration**: OpenRouter (GPT-4o)
+**Developers:**
+- **Muhammad Navas** - Lead Developer & Full Stack
+- **Samarth Hegde** - Backend & Database
+- **Abdulrehan M K** - Frontend & UI/UX
+- **Sanketh H R** - AI Integration & DevOps
+
+**Technologies & Services:**
+- **AI Model**: OpenRouter (GPT-4o-mini)
 - **Infrastructure**: Vercel, Render, Supabase
+- **Automation**: n8n Cloud
 
 ---
 
