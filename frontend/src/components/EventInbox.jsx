@@ -132,7 +132,7 @@ export default function EventInbox({ student }) {
       <div className="event-inbox-card">
         {/* Header */}
         <div className="inbox-header">
-          <h1>📌 Event Inbox</h1>
+          <h1>📝 Event Inbox</h1>
           <p>Add any task, assignment, exam, or college notice. We'll automatically send WhatsApp reminders and sync with your Google Calendar.</p>
           {studentInfo && (
             <div className="student-info-badge">

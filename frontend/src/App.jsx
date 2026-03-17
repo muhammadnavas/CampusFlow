@@ -108,7 +108,7 @@ function App() {
 
       {/* Page content sits above the background */}
       <div className="relative z-10 pt-20 md:pt-24 px-4 md:px-6">
-        {currentPage === 'home' && <HomePage />}
+        {currentPage === 'home' && <HomePage onPageChange={setCurrentPage} />}
         {currentPage === 'inbox' && <EventInbox student={registeredStudent} />}
         {currentPage === 'dashboard' && <Dashboard student={registeredStudent} />}
       </div>
