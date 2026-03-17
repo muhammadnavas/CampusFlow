@@ -45,16 +45,6 @@ export default function Header({ onPageChange, currentPage, student, onLogout })
                             }}>
                                 CampusFlow
                             </span>
-                            <span style={{
-                                fontSize: '0.65rem',
-                                fontWeight: 500,
-                                color: 'rgba(167, 139, 250, 0.7)',
-                                letterSpacing: '0.05em',
-                                lineHeight: 1,
-                                textTransform: 'uppercase',
-                            }}>
-                                Smart Task Management
-                            </span>
                         </div>
                     </div>
 
