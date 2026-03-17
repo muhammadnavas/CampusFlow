@@ -118,6 +118,59 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+// Login endpoint - allows existing students to login by email
+app.post('/api/login', async (req, res) => {
+  try {
+    const { studentEmail } = req.body;
+
+    // Validate input
+    if (!studentEmail) {
+      return res.status(400).json({ 
+        error: 'Missing required field: studentEmail' 
+      });
+    }
+
+    // Find student by email
+    const { data: student, error } = await supabase
+      .from('students')
+      .select('id, name, email, phone_number, created_at, is_active')
+      .eq('email', studentEmail)
+      .single();
+
+    if (error || !student) {
+      return res.status(404).json({ 
+        error: 'Student not found',
+        message: 'No student registered with this email. Please register first.'
+      });
+    }
+
+    if (!student.is_active) {
+      return res.status(403).json({
+        error: 'Account inactive',
+        message: 'Your account has been deactivated. Please contact support.'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      student: {
+        id: student.id,
+        name: student.name,
+        email: student.email,
+        phoneNumber: student.phone_number,
+      }
+    });
+
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).json({ 
+      error: 'Login failed',
+      details: error.message 
+    });
+  }
+});
+
 // Get student info
 app.get('/api/student/:studentId', async (req, res) => {
   try {

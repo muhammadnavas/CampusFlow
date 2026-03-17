@@ -279,6 +279,41 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Auth Toggle (Login/Register Switch) */
+.auth-toggle {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(124, 58, 237, 0.1);
+}
+
+.auth-toggle p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #a78bfa;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0;
+  font: inherit;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn:hover:not(:disabled) {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
+
+.toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Responsive Design */
 @media (max-width: 480px) {
   .registration-card {

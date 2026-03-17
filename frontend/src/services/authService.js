@@ -62,6 +62,49 @@ export const registerStudent = async (data) => {
 };
 
 /**
+ * Login an existing student by email
+ * @param {string} studentEmail - Student's email address
+ * @returns {Promise<Object>} Student data with ID
+ */
+export const loginStudent = async (studentEmail) => {
+  try {
+    // Validate input
+    if (!studentEmail) {
+      throw new Error('Email is required');
+    }
+
+    console.log('🔓 Logging in student...', studentEmail);
+
+    const response = await fetch(`${API_BASE_URL}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        studentEmail: studentEmail,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || result.message || 'Login failed');
+    }
+
+    // Store student info in localStorage
+    const { student } = result;
+    saveStudentToLocalStorage(student);
+
+    console.log('✅ Login successful:', student);
+    return result;
+
+  } catch (error) {
+    console.error('❌ Login error:', error.message);
+    throw error;
+  }
+};
+
+/**
  * Check if student is already registered
  * @returns {Object|null} Student data if registered, null otherwise
  */

@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
-import { checkBackendConnection, registerStudent } from '../services/authService';
+import { checkBackendConnection, loginStudent } from '../services/authService';
 import '../style/Registration.css';
 
-export default function Registration({ onRegistrationComplete, onSwitchToLogin }) {
-  const [formData, setFormData] = useState({
-    studentName: '',
-    phoneNumber: '',
-    studentEmail: '',
-  });
-
+export default function Login({ onLoginComplete, onSwitchToRegister }) {
+  const [studentEmail, setStudentEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
   const [backendConnected, setBackendConnected] = useState(false);
@@ -33,21 +28,13 @@ export default function Registration({ onRegistrationComplete, onSwitchToLogin }
     checkConnection();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!backendConnected) {
       setMessage({
         type: 'error',
-        text: '❌ Cannot register: Backend is not connected',
+        text: '❌ Cannot login: Backend is not connected',
       });
       return;
     }
@@ -57,32 +44,27 @@ export default function Registration({ onRegistrationComplete, onSwitchToLogin }
 
     try {
       // Validate form
-      if (!formData.studentName || !formData.phoneNumber || !formData.studentEmail) {
-        throw new Error('Please fill in all required fields');
+      if (!studentEmail) {
+        throw new Error('Please enter your email address');
       }
 
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.studentEmail)) {
+      if (!emailRegex.test(studentEmail)) {
         throw new Error('Please enter a valid email address');
       }
 
-      // Validate phone format (basic check)
-      if (formData.phoneNumber.length < 10) {
-        throw new Error('Please enter a valid phone number');
-      }
-
-      // Register student
-      const response = await registerStudent(formData);
+      // Login student
+      const response = await loginStudent(studentEmail);
 
       setMessage({
         type: 'success',
-        text: `✅ Welcome ${response.student.name}! Registration complete. You can now add events.`,
+        text: `✅ Welcome back ${response.student.name}! Logging you in...`,
       });
 
       // Call parent callback after 2 seconds
       setTimeout(() => {
-        onRegistrationComplete(response.student);
+        onLoginComplete(response.student);
       }, 2000);
 
     } catch (error) {
@@ -100,9 +82,9 @@ export default function Registration({ onRegistrationComplete, onSwitchToLogin }
       <div className="registration-card">
         {/* Header */}
         <div className="registration-header">
-          <div className="registration-icon">🎓</div>
+          <div className="registration-icon">🔓</div>
           <h1>CampusFlow</h1>
-          <p>Smart Campus Assistant</p>
+          <p>Welcome Back</p>
         </div>
 
         {/* Connection Status */}
@@ -122,50 +104,15 @@ export default function Registration({ onRegistrationComplete, onSwitchToLogin }
         {/* Form */}
         <form onSubmit={handleSubmit} className="registration-form">
           <div className="form-group">
-            <label htmlFor="studentName">
-              Full Name <span className="required">*</span>
-            </label>
-            <input
-              type="text"
-              id="studentName"
-              name="studentName"
-              value={formData.studentName}
-              onChange={handleInputChange}
-              placeholder="John Doe"
-              className="form-input"
-              disabled={loading}
-              required
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="studentEmail">
               Gmail Address <span className="required">*</span>
             </label>
             <input
               type="email"
               id="studentEmail"
-              name="studentEmail"
-              value={formData.studentEmail}
-              onChange={handleInputChange}
+              value={studentEmail}
+              onChange={(e) => setStudentEmail(e.target.value)}
               placeholder="your.email@gmail.com"
-              className="form-input"
-              disabled={loading}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="phoneNumber">
-              WhatsApp Number <span className="required">*</span>
-            </label>
-            <input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              placeholder="+91 98765 43210"
               className="form-input"
               disabled={loading}
               required
@@ -181,25 +128,25 @@ export default function Registration({ onRegistrationComplete, onSwitchToLogin }
             {loading ? (
               <>
                 <span className="spinner"></span>
-                Registering...
+                Logging in...
               </>
             ) : (
-              '✨ Get Started'
+              '🔑 Login'
             )}
           </button>
         </form>
 
-        {/* Switch to Login Link */}
+        {/* Switch to Register Link */}
         <div className="auth-toggle">
           <p>
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <button
               type="button"
-              onClick={onSwitchToLogin}
+              onClick={onSwitchToRegister}
               className="toggle-btn"
               disabled={loading}
             >
-              Login here
+              Register here
             </button>
           </p>
         </div>

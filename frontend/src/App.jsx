@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import EventInbox from './components/EventInbox.jsx';
+import Login from './components/Login.jsx';
 import Registration from './components/Registration.jsx';
 import { getRegisteredStudent, logoutStudent } from './services/authService.js';
 import FloatingLines from './style/FloatingLines.jsx';
@@ -11,6 +12,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [registeredStudent, setRegisteredStudent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
 
   // Check if student is already registered on app load
   useEffect(() => {
@@ -19,7 +21,7 @@ function App() {
     setIsLoading(false);
   }, []);
 
-  // If student is not registered, show registration page
+  // If student is not registered, show login/register page
   if (!registeredStudent && !isLoading) {
     return (
       <>
@@ -44,14 +46,25 @@ function App() {
           />
         </div>
 
-        {/* Registration Component */}
+        {/* Auth Component */}
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <Registration
-            onRegistrationComplete={(student) => {
-              setRegisteredStudent(student);
-              setCurrentPage('inbox');
-            }}
-          />
+          {showLogin ? (
+            <Login
+              onLoginComplete={(student) => {
+                setRegisteredStudent(student);
+                setCurrentPage('inbox');
+              }}
+              onSwitchToRegister={() => setShowLogin(false)}
+            />
+          ) : (
+            <Registration
+              onRegistrationComplete={(student) => {
+                setRegisteredStudent(student);
+                setCurrentPage('inbox');
+              }}
+              onSwitchToLogin={() => setShowLogin(true)}
+            />
+          )}
         </div>
       </>
     );
