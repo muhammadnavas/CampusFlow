@@ -80,10 +80,10 @@ export default function EventInbox({ student }) {
         {/* Header */}
         <div className="inbox-header">
           <h1>📌 Event Inbox</h1>
-          <p>Enter event details and we'll automatically send WhatsApp reminders and create calendar events</p>
+          <p>Add any task, assignment, exam, or college notice. We'll automatically send WhatsApp reminders and sync with your Google Calendar.</p>
           {studentInfo && (
             <div className="student-info-badge">
-              👤 {studentInfo.name} | 📱 {studentInfo.phoneNumber}
+              👤 <strong>{studentInfo.name}</strong> | 📱 {studentInfo.phoneNumber}
             </div>
           )}
         </div>
@@ -185,13 +185,22 @@ export default function EventInbox({ student }) {
 
         {/* Info Box */}
         <div className="info-box">
-          <h3>🧠 What happens next:</h3>
+          <h3>🚀 CampusFlow Automation Pipeline:</h3>
           <ol>
-            <li>✅ Event saved to your profile</li>
-            <li>📱 WhatsApp reminder sent to your phone</li>
-            <li>📅 Google Calendar event automatically created</li>
-            <li>🔔 You get notifications on time</li>
+            <li><strong>✅ Save to Database</strong> - Event securely stored in your profile</li>
+            <li><strong>📱 WhatsApp Notification</strong> - Instant reminder to your registered number</li>
+            <li><strong>📅 Google Calendar Sync</strong> - Event automatically added to your calendar</li>
+            <li><strong>⏰ Scheduled Reminders</strong> - Regular notifications leading up to the event</li>
+            <li><strong>✨ Done!</strong> - Never miss a deadline again</li>
           </ol>
+          <p style={{
+            marginTop: '12px',
+            fontSize: '0.85rem',
+            color: 'rgba(255,255,255,0.6)',
+            fontStyle: 'italic'
+          }}>
+            💡 Tip: Add events as soon as you see your college notices or get assignments to maximize reminder accuracy
+          </p>
         </div>
       </div>
     </div>

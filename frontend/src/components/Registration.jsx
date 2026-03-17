@@ -100,15 +100,15 @@ export default function Registration({ onRegistrationComplete }) {
       <div className="registration-card">
         {/* Header */}
         <div className="registration-header">
-          <div className="registration-icon">📚</div>
+          <div className="registration-icon">🎓</div>
           <h1>CampusFlow</h1>
-          <p>Smart Student Task & Event Management</p>
+          <p>AI-Powered Student Task & Notice Management System</p>
         </div>
 
         {/* Subtitle */}
         <div className="registration-subtitle">
-          <h2>Welcome! Let's Get Started</h2>
-          <p>Register once to start receiving automatic reminders for your assignments, exams, and college notices</p>
+          <h2>Welcome to Your Smart Campus Assistant!</h2>
+          <p>Convert college notices, assignments, and deadlines into automated reminders. One-time registration required.</p>
         </div>
 
         {/* Connection Status */}
@@ -199,18 +199,20 @@ export default function Registration({ onRegistrationComplete }) {
 
         {/* Features */}
         <div className="registration-features">
-          <h3>What You Get:</h3>
+          <h3>🚀 Features:</h3>
           <ul>
-            <li>📱 WhatsApp reminders for your events</li>
-            <li>📅 Automatic Google Calendar events</li>
-            <li>⏰ Never miss assignments or exams again</li>
-            <li>🤖 AI-powered event processing</li>
+            <li>📱 <strong>WhatsApp Reminders</strong> - Get instant notifications for all your tasks</li>
+            <li>📅 <strong>Google Calendar Sync</strong> - Events automatically added to your calendar</li>
+            <li>🎯 <strong>Smart Processing</strong> - Understands assignments, exams, and notices automatically</li>
+            <li>⏰ <strong>Never Miss Deadlines</strong> - Timely reminders before important dates</li>
+            <li>🔐 <strong>Secure & Private</strong> - Your data is encrypted and only used for reminders</li>
           </ul>
         </div>
 
         {/* Info Box */}
         <div className="registration-info">
-          <strong>ℹ️ Note:</strong> You only need to register once. Your information is securely stored and used to send you reminders.
+          <strong>ℹ️ About CampusFlow:</strong><br/>
+          CampusFlow is an intelligent notification system that helps students never miss important college deadlines. Simply feed your event details to our system, and we'll handle WhatsApp reminders and calendar synchronization automatically. Your registration is one-time, secure, and GDPR-compliant.
         </div>
       </div>
     </div>

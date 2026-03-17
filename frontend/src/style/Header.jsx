@@ -31,19 +31,31 @@ export default function Header({ onPageChange, currentPage, student, onLogout })
                     {/* Logo / Brand */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => handleNavClick('home')}>
                         <span style={{
-                            fontSize: '1.2rem',
+                            fontSize: '1.4rem',
                         }}>
-                            📚
+                            🎓
                         </span>
-                        <span style={{
-                            fontSize: '1.2rem',
-                            fontWeight: 700,
-                            color: 'white',
-                            letterSpacing: '-0.03em',
-                            lineHeight: 1,
-                        }}>
-                            CampusFlow
-                        </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
+                            <span style={{
+                                fontSize: '1.2rem',
+                                fontWeight: 700,
+                                color: 'white',
+                                letterSpacing: '-0.03em',
+                                lineHeight: 1,
+                            }}>
+                                CampusFlow
+                            </span>
+                            <span style={{
+                                fontSize: '0.65rem',
+                                fontWeight: 500,
+                                color: 'rgba(167, 139, 250, 0.7)',
+                                letterSpacing: '0.05em',
+                                lineHeight: 1,
+                                textTransform: 'uppercase',
+                            }}>
+                                Smart Task Management
+                            </span>
+                        </div>
                     </div>
 
                     {/* Nav links */}

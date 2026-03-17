@@ -68,7 +68,7 @@ function App() {
         width: '100vw',
         height: '100vh',
         zIndex: 0,
-        background: '#0a0a0f',
+        background: 'linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0a1f 100%)',
       }}>
         <FloatingLines
           enabledWaves={['top', 'middle', 'bottom']}
