@@ -696,18 +696,6 @@ This project is licensed under the MIT License - see LICENSE file for details.
 **Last Updated:** March 18, 2026  
 **Version:** 1.0.0  
 **Status:** Production Ready
-VITE_API_URL=http://localhost:5000/api
-# Production (Render backend)
-# VITE_API_URL=https://campusflow-qas5.onrender.com/api
-
-# ============================================
-# n8n Webhook URL (Event Processing)
-# ============================================
-VITE_N8N_WEBHOOK_URL=https://muhammadnavas.app.n8n.cloud/webhook/reminder
-
-# ============================================
-# Gemini API Key (Optional - for backup AI)
-# ============================================
 VITE_GEMINI_API_KEY=AIzaSy_YOUR_GEMINI_KEY_HERE
 ```
 
