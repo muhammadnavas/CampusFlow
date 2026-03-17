@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getRegisteredStudent } from '../services/authService';
 import { sendEventToAutomation } from '../services/eventService';
+import { extractEventFromText, validateExtractedEvent } from '../services/geminiService';
 import '../style/EventInbox.css';
 
 export default function EventInbox({ student }) {
@@ -14,6 +15,9 @@ export default function EventInbox({ student }) {
   const [studentInfo, setStudentInfo] = useState(student);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [showParseSection, setShowParseSection] = useState(false);
+  const [rawText, setRawText] = useState('');
+  const [parsing, setParsing] = useState(false);
 
   // Get student info from localStorage if not passed as prop
   useEffect(() => {
@@ -74,6 +78,50 @@ export default function EventInbox({ student }) {
     }
   };
 
+  const handleParseText = async () => {
+    setParsing(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const result = await extractEventFromText(rawText);
+
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      // Validate extracted data
+      const validation = validateExtractedEvent(result.data);
+      if (!validation.isValid) {
+        throw new Error(`Validation failed:\n${validation.errors.join('\n')}`);
+      }
+
+      // Populate form with extracted data
+      setFormData({
+        title: result.data.title,
+        date: result.data.date,
+        time: result.data.time,
+        description: result.data.description,
+      });
+
+      setMessage({
+        type: 'success',
+        text: '✅ Event details extracted! Review and submit to create the event.',
+      });
+
+      // Hide parse section after successful extraction
+      setShowParseSection(false);
+      setRawText('');
+
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        text: `❌ Parsing error: ${error.message}`,
+      });
+    } finally {
+      setParsing(false);
+    }
+  };
+
   return (
     <div className="event-inbox-container">
       <div className="event-inbox-card">
@@ -94,6 +142,96 @@ export default function EventInbox({ student }) {
             {message.text}
           </div>
         )}
+
+        {/* AI Text Parser Section */}
+        <div style={{
+          marginBottom: '24px',
+          padding: '16px',
+          borderRadius: '12px',
+          border: '1px solid rgba(167, 139, 250, 0.2)',
+          background: 'rgba(167, 139, 250, 0.05)',
+        }}>
+          <button
+            type="button"
+            onClick={() => setShowParseSection(!showParseSection)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#a78bfa',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: 0,
+            }}
+          >
+            🤖 {showParseSection ? '▼' : '▶'} Parse College Notice with AI
+          </button>
+
+          {showParseSection && (
+            <div style={{ marginTop: '12px' }}>
+              <label htmlFor="rawText" style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontSize: '0.9rem',
+                color: 'rgba(255,255,255,0.7)',
+              }}>
+                Paste your college notice or assignment details:
+              </label>
+              <textarea
+                id="rawText"
+                value={rawText}
+                onChange={(e) => setRawText(e.target.value)}
+                placeholder="Paste your college notice, assignment sheet, or exam details here... Example: 'DSA Assignment due on March 25, 2026 at 5 PM. Submit online.'"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(167, 139, 250, 0.3)',
+                  background: 'rgba(10, 8, 25, 0.8)',
+                  color: 'white',
+                  fontFamily: 'inherit',
+                  fontSize: '0.9rem',
+                  minHeight: '100px',
+                  resize: 'vertical',
+                  marginBottom: '12px',
+                }}
+                disabled={parsing}
+              />
+              <button
+                type="button"
+                onClick={handleParseText}
+                disabled={parsing || !rawText.trim()}
+                style={{
+                  width: '100%',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: parsing ? 'rgba(167, 139, 250, 0.3)' : 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)',
+                  color: 'white',
+                  fontSize: '0.95rem',
+                  fontWeight: 600,
+                  cursor: parsing ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {parsing ? (
+                  <>
+                    <span style={{ marginRight: '8px' }}>⏳</span>
+                    Extracting with Gemini AI...
+                  </>
+                ) : (
+                  <>
+                    <span style={{ marginRight: '8px' }}>✨</span>
+                    Extract Event Details with AI
+                  </>
+                )}
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="event-form">
