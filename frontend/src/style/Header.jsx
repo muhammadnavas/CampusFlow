@@ -37,7 +37,7 @@ export default function Header({ onPageChange, currentPage, student, onLogout })
                         </span>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
                             <span style={{
-                                fontSize: '1.2rem',
+                                fontSize: '1.6rem',
                                 fontWeight: 700,
                                 color: 'white',
                                 letterSpacing: '-0.03em',
@@ -52,7 +52,8 @@ export default function Header({ onPageChange, currentPage, student, onLogout })
                     <nav style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
                         {[
                             { label: 'Home', page: 'home' },
-                            { label: 'Event Inbox', page: 'inbox' }
+                            { label: 'Event Inbox', page: 'inbox' },
+                            { label: 'Dashboard', page: 'dashboard' }
                         ].map(({ label, page }) => (
                             <button
                                 key={page}

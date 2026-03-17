@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import Dashboard from './components/Dashboard.jsx';
 import EventInbox from './components/EventInbox.jsx';
 import Login from './components/Login.jsx';
 import Registration from './components/Registration.jsx';
@@ -109,6 +110,7 @@ function App() {
       <div style={{ position: 'relative', zIndex: 1, paddingTop: '80px' }}>
         {currentPage === 'home' && <HomePage />}
         {currentPage === 'inbox' && <EventInbox student={registeredStudent} />}
+        {currentPage === 'dashboard' && <Dashboard student={registeredStudent} />}
       </div>
     </>
   );
