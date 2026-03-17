@@ -26,50 +26,50 @@ function useCountUp(target, duration = 1800, trigger) {
 const CORE_COMPONENTS = [
   {
     num: '01',
-    title: 'GitHub Integration',
+    title: 'Notice & Assignment Parsing',
     description:
-      'Listens to GitHub webhooks, reads changed files, detects modified endpoints, and understands full commit context through the GitHub API.',
-    tags: ['Webhooks', 'GitHub API', 'Repo Cloning'],
+      'AI-powered parsing of college notices, assignment sheets, and academic notifications. Automatically extracts key information like dates, deadlines, and requirements.',
+    tags: ['OCR', 'NLP', 'OpenRouter AI'],
     gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
   },
   {
     num: '02',
-    title: 'Code Understanding Agent',
+    title: 'Smart Event Extraction',
     description:
-      'Uses LLMs (GPT, Gemini, HuggingFace) to read API routes, detect request/response structures, understand auth logic, and identify edge cases.',
-    tags: ['OpenAI GPT', 'Gemini', 'HuggingFace'],
+      'Uses advanced LLMs to understand context, convert unstructured text into structured event data with title, date, time, and description.',
+    tags: ['GPT-4o', 'AI Processing', 'Data Extraction'],
     gradient: 'linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%)',
   },
   {
     num: '03',
-    title: 'Test Case Generator',
+    title: 'Google Calendar Integration',
     description:
-      'Automatically generates positive, negative, edge-case, auth-failure, and rate-limit tests adapted to every changed endpoint.',
-    tags: ['Positive Tests', 'Negative Tests', 'Edge Cases'],
+      'Automatically sync extracted events to your Google Calendar. Never miss important deadlines with built-in reminders and notifications.',
+    tags: ['Google API', 'Calendar Sync', 'OAuth'],
     gradient: 'linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)',
   },
   {
     num: '04',
-    title: 'API Test Executor',
+    title: 'WhatsApp Reminders',
     description:
-      'Runs tests inside the CI pipeline using Postman, Pytest, and Newman. Integrated with GitHub Actions for seamless automation.',
-    tags: ['Postman', 'Pytest', 'Newman', 'GitHub Actions'],
+      'Get instant WhatsApp notifications before important dates. Customizable alert times to ensure you never miss a single deadline.',
+    tags: ['WhatsApp API', 'Notifications', 'n8n Automation'],
     gradient: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
   },
   {
     num: '05',
-    title: 'Failure Analysis Agent',
+    title: 'Student Registration',
     description:
-      'Reads stack traces, understands error types, compares expected vs actual responses, and provides actionable fix suggestions.',
-    tags: ['Stack Trace Analysis', 'Error Classification', 'Fix Hints'],
+      'One-time secure registration linking your Gmail and WhatsApp. All your student data is encrypted and GDPR-compliant.',
+    tags: ['Supabase Auth', 'Security', 'Privacy'],
     gradient: 'linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%)',
   },
   {
     num: '06',
-    title: 'Report Generator',
+    title: 'Dashboard & Analytics',
     description:
-      'Creates Markdown reports, JSON logs, PR comments, and sends alerts via Email/Slack to keep the whole team informed instantly.',
-    tags: ['Markdown', 'JSON Logs', 'Slack', 'PR Comments'],
+      'Track all your events, deadlines, and reminders in one place. View upcoming assignments and manage your academic schedule effortlessly.',
+    tags: ['Analytics', 'Dashboard', 'Event Tracking'],
     gradient: 'linear-gradient(135deg, #4338ca 0%, #6366f1 100%)',
   },
 ];
@@ -79,10 +79,10 @@ const CORE_COMPONENTS = [
    Stats data
 ───────────────────────────────────────────── */
 const STATS = [
-  { value: 95, suffix: '%', label: 'Test Coverage' },
-  { value: 10, suffix: 'x', label: 'Faster than Manual' },
-  { value: 100, suffix: '+', label: 'Test Cases Generated' },
-  { value: 3, suffix: 's', label: 'Avg. Detection Time' },
+  { value: 100, suffix: '%', label: 'Smart Parsing' },
+  { value: 50, suffix: '+', label: 'Students Registered' },
+  { value: 1000, suffix: '+', label: 'Events Tracked' },
+  { value: 24, suffix: 'h', label: 'Advance Notice' },
 ];
 
 /* ─────────────────────────────────────────────
@@ -183,7 +183,7 @@ function HeroSection() {
         WebkitTextFillColor: 'transparent',
         backgroundClip: 'text',
       }}>
-        Agentic AI–Based<br />API Testing for DevOps
+        CampusFlow<br />Smart Campus Assistant
       </h1>
 
       {/* Sub-headline */}
@@ -194,15 +194,13 @@ function HeroSection() {
         maxWidth: '680px',
         margin: '0 auto 40px',
       }}>
-        An intelligent agent that automatically monitors GitHub pushes, understands code changes,
-        generates adaptive test cases, executes them, analyzes failures, and delivers structured
-        reports — all without a single manual step.
+        Convert college notices, assignments, and deadlines into automated reminders. AI-powered event parsing with Google Calendar sync and WhatsApp notifications for effortless academic management.
       </p>
 
       {/* CTAs */}
       <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <GlowButton primary>🚀 Run Your First Test</GlowButton>
-        <GlowButton primary={false}>View Architecture →</GlowButton>
+        <GlowButton primary>✨ Get Started</GlowButton>
+        <GlowButton primary={false}>Learn More →</GlowButton>
       </div>
 
       {/* Floating code snippet preview */}
@@ -225,13 +223,13 @@ function HeroSection() {
             <div key={c} style={{ width: '12px', height: '12px', borderRadius: '50%', background: c }} />
           ))}
         </div>
-        <div style={{ color: token.textDim }}>{'# Vector AI Agent output'}</div>
-        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#6ee7b7' }}>Webhook received</span> <span style={{ color: token.textDim }}>— POST /webhook/github</span></div>
-        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#93c5fd' }}>Analyzing diff</span> <span style={{ color: token.textDim }}>— routes/users.py (+47 lines)</span></div>
-        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#fbbf24' }}>Generating tests</span> <span style={{ color: token.textDim }}>— POST /users → 8 cases</span></div>
-        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#6ee7b7' }}>Executing via Pytest</span> <span style={{ color: token.textDim }}>— 7 passed, 1 failed</span></div>
-        <div><span style={{ color: '#f87171' }}>✗</span> <span style={{ color: '#f87171' }}>FAIL</span> <span style={{ color: token.textDim }}>test_missing_email — 500 Internal Server Error</span></div>
-        <div style={{ marginTop: '8px' }}><span style={{ color: '#a78bfa' }}>💡 Fix:</span> <span style={{ color: '#e2e8f0' }}>"Null check missing for user.email in validation layer"</span></div>
+        <div style={{ color: token.textDim }}>{'# CampusFlow Event Processor'}</div>
+        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#6ee7b7' }}>Notice received</span> <span style={{ color: token.textDim }}>— "MidTerm Exams Schedule"</span></div>
+        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#93c5fd' }}>Parsing with AI</span> <span style={{ color: token.textDim }}>— OpenRouter GPT-4o</span></div>
+        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#fbbf24' }}>Extracting events</span> <span style={{ color: token.textDim }}>— Math Exam: 2026-04-15 10:00</span></div>
+        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#6ee7b7' }}>Syncing to Calendar</span> <span style={{ color: token.textDim }}>— Google Calendar API</span></div>
+        <div><span style={{ color: '#a78bfa' }}>✓</span> <span style={{ color: '#6ee7b7' }}>Scheduling reminder</span> <span style={{ color: token.textDim }}>— WhatsApp alert 24h before</span></div>
+        <div style={{ marginTop: '8px' }}><span style={{ color: '#a78bfa' }}>🎉 Success:</span> <span style={{ color: '#e2e8f0' }}>"Event added to calendar and reminder set!"</span></div>
       </div>
     </section>
   );
