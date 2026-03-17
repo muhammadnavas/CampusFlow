@@ -3,17 +3,16 @@
 .event-inbox-container {
   min-height: 100vh;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #0a0a0f 0%, #16213e 100%);
 }
 
 .event-inbox-card {
   max-width: 900px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: rgba(10, 8, 25, 0.55);
+  border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }
 

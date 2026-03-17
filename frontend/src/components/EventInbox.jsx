@@ -50,8 +50,13 @@ export default function EventInbox({ student }) {
         throw new Error('Student not registered. Please register first.');
       }
 
-      // Send event to backend and n8n
-      const response = await sendEventToAutomation(studentInfo.id, formData);
+      // Send event to backend and n8n with student contact info
+      const eventDataWithContact = {
+        ...formData,
+        phoneNumber: studentInfo.phoneNumber,
+        studentEmail: studentInfo.email,
+      };
+      const response = await sendEventToAutomation(studentInfo.id, eventDataWithContact);
 
       // Reset form
       setFormData({
@@ -146,16 +151,17 @@ export default function EventInbox({ student }) {
         {/* AI Text Parser Section */}
         <div style={{
           marginBottom: '24px',
-          padding: '16px',
           borderRadius: '12px',
-          border: '1px solid rgba(167, 139, 250, 0.2)',
-          background: 'rgba(167, 139, 250, 0.05)',
+          border: '1px solid rgba(167, 139, 250, 0.3)',
+          background: 'rgba(167, 139, 250, 0.08)',
+          overflow: 'hidden',
         }}>
           <button
             type="button"
             onClick={() => setShowParseSection(!showParseSection)}
             style={{
-              background: 'none',
+              width: '100%',
+              background: 'linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%)',
               border: 'none',
               color: '#a78bfa',
               fontSize: '1rem',
@@ -163,15 +169,31 @@ export default function EventInbox({ student }) {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              padding: 0,
+              gap: '10px',
+              padding: '14px 16px',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(167, 139, 250, 0.25) 0%, rgba(139, 92, 246, 0.15) 100%)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(139, 92, 246, 0.1) 100%)';
             }}
           >
-            🤖 {showParseSection ? '▼' : '▶'} Parse College Notice with AI
+            <span style={{ fontSize: '1.2rem' }}>🤖</span>
+            <span style={{ 
+              fontSize: '1.2rem', 
+              transition: 'transform 0.2s ease',
+              transform: showParseSection ? 'rotate(0deg)' : 'rotate(-90deg)',
+              display: 'inline-block'
+            }}>
+              ▼
+            </span>
+            Parse College Notice with AI
           </button>
 
           {showParseSection && (
-            <div style={{ marginTop: '12px' }}>
+            <div style={{ marginTop: 0, padding: '16px' }}>
               <label htmlFor="rawText" style={{
                 display: 'block',
                 marginBottom: '8px',

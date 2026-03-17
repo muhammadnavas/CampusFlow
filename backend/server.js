@@ -211,7 +211,9 @@ app.post('/api/events', async (req, res) => {
       title, 
       date, 
       time, 
-      description 
+      description,
+      phoneNumber,
+      studentEmail
     } = req.body;
 
     // Validate input
@@ -265,6 +267,8 @@ app.post('/api/events', async (req, res) => {
         body: JSON.stringify({
           eventId: event.id,
           studentId: studentId,
+          phoneNumber: phoneNumber || null,
+          studentEmail: studentEmail || null,
           title: event.title,
           date: event.date,
           time: event.time,

@@ -31,6 +31,8 @@ export const createEvent = async (studentId, eventData) => {
       date: eventData.date,
       time: eventData.time,
       description: eventData.description || null,
+      phoneNumber: eventData.phoneNumber || null,
+      studentEmail: eventData.studentEmail || null,
     };
 
     console.log('📤 Sending payload:', payload);
