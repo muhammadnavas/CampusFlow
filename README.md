@@ -1,4 +1,4 @@
-"# 🎓 CampusFlow
+# 🎓 CampusFlow
 
 **AI-Powered Student Task & Notice Management System**
 
