@@ -1,20 +1,27 @@
-import { useState } from 'react';
-import { sendEventToN8n } from '../services/n8nService';
+import { useEffect, useState } from 'react';
+import { getRegisteredStudent } from '../services/authService';
+import { sendEventToAutomation } from '../services/eventService';
 import '../style/EventInbox.css';
 
-export default function EventInbox() {
+export default function EventInbox({ student }) {
   const [formData, setFormData] = useState({
     title: '',
     date: '',
     time: '',
     description: '',
-    studentName: '',
-    phoneNumber: '',
-    studentEmail: '',
   });
 
+  const [studentInfo, setStudentInfo] = useState(student);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  // Get student info from localStorage if not passed as prop
+  useEffect(() => {
+    if (!studentInfo) {
+      const registered = getRegisteredStudent();
+      setStudentInfo(registered);
+    }
+  }, [studentInfo]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,8 +42,12 @@ export default function EventInbox() {
         throw new Error('Please fill in required fields: Title, Date, and Time');
       }
 
-      // Send to n8n
-      const response = await sendEventToN8n(formData);
+      if (!studentInfo || !studentInfo.id) {
+        throw new Error('Student not registered. Please register first.');
+      }
+
+      // Send event to backend and n8n
+      const response = await sendEventToAutomation(studentInfo.id, formData);
 
       // Reset form
       setFormData({
@@ -44,14 +55,11 @@ export default function EventInbox() {
         date: '',
         time: '',
         description: '',
-        studentName: '',
-        phoneNumber: '',
-        studentEmail: '',
       });
 
       setMessage({
         type: 'success',
-        text: '✅ Event sent successfully! WhatsApp reminder and Google Calendar event will be created.',
+        text: '✅ Event created successfully! WhatsApp reminder and Google Calendar event will be created shortly.',
       });
 
       // Clear message after 5 seconds
@@ -73,6 +81,11 @@ export default function EventInbox() {
         <div className="inbox-header">
           <h1>📌 Event Inbox</h1>
           <p>Enter event details and we'll automatically send WhatsApp reminders and create calendar events</p>
+          {studentInfo && (
+            <div className="student-info-badge">
+              👤 {studentInfo.name} | 📱 {studentInfo.phoneNumber}
+            </div>
+          )}
         </div>
 
         {/* Alert Messages */}
@@ -84,49 +97,6 @@ export default function EventInbox() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="event-form">
-          {/* Student Info Section */}
-          <div className="form-section">
-            <h2 className="section-title">👤 Student Information</h2>
-            <div className="form-group-row">
-              <div className="form-group">
-                <label htmlFor="studentName">Student Name *</label>
-                <input
-                  type="text"
-                  id="studentName"
-                  name="studentName"
-                  value={formData.studentName}
-                  onChange={handleInputChange}
-                  placeholder="Your name"
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phoneNumber">WhatsApp Phone Number</label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                  placeholder="+91 98765 43210"
-                  className="form-input"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="studentEmail">Gmail Address</label>
-                <input
-                  type="email"
-                  id="studentEmail"
-                  name="studentEmail"
-                  value={formData.studentEmail}
-                  onChange={handleInputChange}
-                  placeholder="your.email@gmail.com"
-                  className="form-input"
-                />
-              </div>
-            </div>
-          </div>
-
           {/* Event Details Section */}
           <div className="form-section">
             <h2 className="section-title">📅 Event Details</h2>
@@ -144,6 +114,7 @@ export default function EventInbox() {
                 placeholder="e.g., DSA Assignment, Math Exam, College notice"
                 className="form-input"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -160,6 +131,7 @@ export default function EventInbox() {
                   onChange={handleInputChange}
                   className="form-input"
                   required
+                  disabled={loading}
                 />
               </div>
               <div className="form-group">
@@ -174,6 +146,7 @@ export default function EventInbox() {
                   onChange={handleInputChange}
                   className="form-input"
                   required
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -188,6 +161,7 @@ export default function EventInbox() {
                 placeholder="Add any additional details about this event..."
                 className="form-textarea"
                 rows="4"
+                disabled={loading}
               />
             </div>
           </div>
@@ -201,10 +175,10 @@ export default function EventInbox() {
             {loading ? (
               <>
                 <span className="spinner"></span>
-                Sending to n8n...
+                Creating event...
               </>
             ) : (
-              '🚀 Send to n8n Webhook'
+              '🚀 Create Event'
             )}
           </button>
         </form>
@@ -213,7 +187,7 @@ export default function EventInbox() {
         <div className="info-box">
           <h3>🧠 What happens next:</h3>
           <ol>
-            <li>🤖 AI extracts event details and processes them</li>
+            <li>✅ Event saved to your profile</li>
             <li>📱 WhatsApp reminder sent to your phone</li>
             <li>📅 Google Calendar event automatically created</li>
             <li>🔔 You get notifications on time</li>

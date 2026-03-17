@@ -1,0 +1,184 @@
+{
+  "name": "CampusFlow Event Processor",
+  "description": "Receives event details from CampusFlow frontend, processes them, sends WhatsApp reminders, and creates Google Calendar events",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "path": "campusflow",
+        "authentication": "none",
+        "respondWithOptions": {
+          "responseCode": 200
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Validate and extract event data\nconst eventData = $json.body;\n\n// Validate required fields\nif (!eventData.title || !eventData.date || !eventData.time) {\n  throw new Error('Missing required fields: title, date, time');\n}\n\n// Parse date and time\nconst eventDateTime = new Date(`${eventData.date}T${eventData.time}:00`);\n\nreturn {\n  ...eventData,\n  eventDateTime: eventDateTime.toISOString(),\n  status: 'validated',\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "validate-data",
+      "name": "Validate & Parse Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "conditions": [
+            {
+              "key": "phoneNumber",
+              "condition": "notEmpty"
+            }
+          ]
+        }
+      },
+      "id": "check-phone",
+      "name": "Has Phone Number?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [500, 200]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "event",
+        "operation": "create",
+        "calendarId": "primary",
+        "title": "={{ $json.title }}",
+        "description": "={{ $json.description || $json.title }}",
+        "start": "={{ $json.eventDateTime }}",
+        "end": "={{ new Date(new Date($json.eventDateTime).getTime() + 3600000).toISOString() }}",
+        "visibility": "public"
+      },
+      "id": "google-calendar",
+      "name": "Create Google Calendar Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 2,
+      "position": [500, 400]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "create",
+        "to": "whatsapp:={{ $json.phoneNumber.replace(/[^0-9+]/g, '') }}",
+        "message": "📌 Reminder: {{ $json.title }}\\nDue: {{ $json.date }} at {{ $json.time }}\\n\\n{{ $json.description || 'No additional details' }}"
+      },
+      "id": "twilio-whatsapp",
+      "name": "Send WhatsApp Reminder",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "json": {
+          "success": true,
+          "message": "Event processed successfully",
+          "calendarEventCreated": true,
+          "whatsappSent": true,
+          "eventDetails": "={{ $json }}"
+        }
+      },
+      "id": "success-response",
+      "name": "Send Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "json": {
+          "success": false,
+          "message": "Phone number not provided, calendar event created but no WhatsApp reminder sent"
+        }
+      },
+      "id": "partial-response",
+      "name": "Send Partial Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 100]
+    }
+  ],
+  "connections": {
+    "webhook-trigger": {
+      "main": [
+        [
+          {
+            "node": "validate-data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "validate-data": {
+      "main": [
+        [
+          {
+            "node": "check-phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check-phone": {
+      "main": [
+        [
+          {
+            "node": "twilio-whatsapp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "google-calendar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "google-calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "google-calendar": {
+      "main": [
+        [
+          {
+            "node": "success-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "twilio-whatsapp": {
+      "main": [
+        [
+          {
+            "node": "success-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "staticData": null,
+  "tags": ["CampusFlow", "Students", "Automation"],
+  "pinData": {}
+}

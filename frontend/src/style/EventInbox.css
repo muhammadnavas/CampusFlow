@@ -36,8 +36,23 @@
 .inbox-header p {
   font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.6);
-  margin: 0;
+  margin: 0 0 15px;
   line-height: 1.6;
+}
+
+.student-info-badge {
+  display: inline-block;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: #a78bfa;
+  font-weight: 500;
+  margin-top: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Alert Messages */

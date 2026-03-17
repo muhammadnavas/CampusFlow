@@ -1,13 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import './App.css';
+import EventInbox from './components/EventInbox.jsx';
+import Registration from './components/Registration.jsx';
+import { getRegisteredStudent, logoutStudent } from './services/authService.js';
 import FloatingLines from './style/FloatingLines.jsx';
 import Header from './style/Header.jsx';
 import HomePage from './style/HomePage.jsx';
-import EventInbox from './components/EventInbox.jsx';
-import './App.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' or 'inbox'
+  const [currentPage, setCurrentPage] = useState('home');
+  const [registeredStudent, setRegisteredStudent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Check if student is already registered on app load
+  useEffect(() => {
+    const student = getRegisteredStudent();
+    setRegisteredStudent(student);
+    setIsLoading(false);
+  }, []);
+
+  // If student is not registered, show registration page
+  if (!registeredStudent && !isLoading) {
+    return (
+      <>
+        {/* Background */}
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 0,
+          background: '#0a0a0f',
+        }}>
+          <FloatingLines
+            enabledWaves={['top', 'middle', 'bottom']}
+            lineCount={5}
+            lineDistance={5}
+            bendRadius={5}
+            bendStrength={-0.5}
+            interactive={true}
+            parallax={true}
+          />
+        </div>
+
+        {/* Registration Component */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Registration
+            onRegistrationComplete={(student) => {
+              setRegisteredStudent(student);
+              setCurrentPage('inbox');
+            }}
+          />
+        </div>
+      </>
+    );
+  }
+
+  // Main app layout after registration
   return (
     <>
       {/* Full-viewport background canvas */}
@@ -32,12 +82,20 @@ function App() {
       </div>
 
       {/* Header — sits above the canvas */}
-      <Header onPageChange={setCurrentPage} currentPage={currentPage} />
+      <Header 
+        onPageChange={setCurrentPage} 
+        currentPage={currentPage}
+        student={registeredStudent}
+        onLogout={() => {
+          logoutStudent();
+          setRegisteredStudent(null);
+        }}
+      />
 
       {/* Page content sits above the background */}
       <div style={{ position: 'relative', zIndex: 1, paddingTop: '80px' }}>
         {currentPage === 'home' && <HomePage />}
-        {currentPage === 'inbox' && <EventInbox />}
+        {currentPage === 'inbox' && <EventInbox student={registeredStudent} />}
       </div>
     </>
   );
