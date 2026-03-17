@@ -168,6 +168,42 @@ VITE_GEMINI_API_KEY=AIzaSy_YOUR_GEMINI_KEY_HERE
 
 ---
 
+## ⚙️ n8n Automation Workflow
+
+The backbone of CampusFlow's automation is powered by **n8n**, which handles event processing and WhatsApp notifications:
+
+```
+┌─────────────┐   POST    ┌──────────────────┐   1 item    ┌─────────────────────┐
+│  Webhook    │──────────→│  Create an Event │──────────→  │  Send SMS/WhatsApp  │
+│ (Trigger)   │           │  (Calendar Sync) │             │   (Notification)    │
+└─────────────┘           └──────────────────┘             └─────────────────────┘
+```
+
+### Workflow Steps:
+
+1. **Webhook Trigger** 
+   - Receives event data via POST request from backend
+   - Validates incoming event payload
+
+2. **Create an Event**
+   - Stores event in database
+   - Syncs to Google Calendar
+   - Sets reminder parameters
+
+3. **Send WhatsApp Reminder**
+   - Sends WhatsApp message 24 hours before deadline
+   - Includes event details and due time
+   - Customizable message templates
+
+### Benefits:
+- ✅ Real-time event processing
+- ✅ Automatic notification scheduling
+- ✅ No manual intervention required
+- ✅ Scalable and reliable automation
+- ✅ Easy workflow management via n8n UI
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
