@@ -521,6 +521,21 @@ CampusFlow/
 3. Go to Keys section
 4. Add your API key to `.env`
 
+**n8n Webhook Configuration:**
+- `N8N_WEBHOOK_URL` - Webhook URL for n8n workflow automation
+
+**How to Get n8n Webhook URL:**
+1. Access your n8n instance at: https://muhammadnavas.app.n8n.cloud
+2. Create or select your workflow
+3. Add a Webhook trigger node
+4. Copy the webhook URL from the node settings
+5. Add to `.env`: `N8N_WEBHOOK_URL=https://muhammadnavas.app.n8n.cloud/webhook/reminder`
+
+**n8n Instance Details:**
+- **URL**: https://muhammadnavas.app.n8n.cloud
+- **Purpose**: Handles workflow automation, event processing, and notifications
+- **Webhook URL**: https://muhammadnavas.app.n8n.cloud/webhook/reminder
+
 ---
 
 ## ⚠️ Troubleshooting
