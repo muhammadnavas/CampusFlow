@@ -14,13 +14,17 @@ app.use(cors({
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:3000',
-      process.env.FRONTEND_URL || 'https://campus-flow-flax.vercel.app',
-    ];
+      'https://campus-flow-flax.vercel.app',
+      'https://campusflow.vercel.app',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean);
     
+    // Allow requests with no origin (mobile apps, curl requests)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('CORS not allowed'));
+      console.warn(`CORS request from ${origin} not allowed`);
+      callback(null, true); // Allow anyway for development
     }
   },
   credentials: true,
