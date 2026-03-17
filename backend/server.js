@@ -262,6 +262,58 @@ app.get('/api/student/:studentId/events', async (req, res) => {
   }
 });
 
+// OpenRouter proxy endpoint (server-side) to avoid CORS and expose no API key
+app.post('/api/extract-event', async (req, res) => {
+  try {
+    const { rawText } = req.body;
+    if (!rawText || rawText.trim().length === 0) {
+      return res.status(400).json({ error: 'rawText missing' });
+    }
+
+    const apiKey = process.env.OPENROUTER_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: 'OpenRouter API key is not configured on backend' });
+    }
+
+    const prompt = `You are an expert at extracting event information from college notices, assignment sheets, and academic notifications.\n\nExtract the following information from the provided text and return ONLY a valid JSON object (no markdown, no extra text):\n{\n  \"title\": \"event name/title\",\n  \"date\": \"YYYY-MM-DD format\",\n  \"time\": \"HH:MM format (24-hour)\",\n  \"description\": \"detailed description of the event\"\n}\n\nImportant rules:\n- If date is relative (e.g., \"next Monday\"), calculate the actual date\n- Extract submission deadline or exam date if mentioned\n- If time is not explicitly mentioned, use \"09:00\" as default\n- Keep description concise but informative\n- Return ONLY valid JSON, nothing else\n\nText to parse:\n${rawText}`;
+
+    const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini';
+    const openrouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
+
+    const response = await fetch(openrouterUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [
+          { role: 'user', content: prompt }
+        ]
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      console.error('OpenRouter API error', response.status, body);
+      return res.status(response.status).json({ error: body || 'OpenRouter API request failed' });
+    }
+
+    const result = await response.json();
+
+    if (!result.choices || !result.choices[0] || !result.choices[0].message || !result.choices[0].message.content) {
+      return res.status(502).json({ error: 'OpenRouter API returned empty output' });
+    }
+
+    const responseText = result.choices[0].message.content || '';
+    return res.json({ success: true, text: responseText, raw: result });
+  } catch (error) {
+    console.error('OpenRouter proxy error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
@@ -282,5 +334,4 @@ app.listen(PORT, () => {
   console.log(`\n🚀 CampusFlow Backend running on http://localhost:${PORT}`);
   console.log(`📊 Supabase connected to: ${process.env.SUPABASE_URL}`);
   console.log(`🌐 CORS enabled for: ${process.env.FRONTEND_URL}`);
-  console.log(`\n✅ Health check: GET http://localhost:${PORT}/api/health\n`);
 });

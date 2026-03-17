@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import {
-    Scene,
-    OrthographicCamera,
-    WebGLRenderer,
-    PlaneGeometry,
     Mesh,
+    OrthographicCamera,
+    PlaneGeometry,
+    Scene,
     ShaderMaterial,
-    Vector3,
+    Timer,
     Vector2,
-    Clock
+    Vector3,
+    WebGLRenderer
 } from 'three';
 
 const vertexShader = `
@@ -359,7 +359,8 @@ export default function FloatingLines({
         const mesh = new Mesh(geometry, material);
         scene.add(mesh);
 
-        const clock = new Clock();
+        const clock = new Timer();
+        clock.connect(document);
 
         const setSize = () => {
             const el = containerRef.current;
@@ -409,8 +410,9 @@ export default function FloatingLines({
         }
 
         let raf = 0;
-        const renderLoop = () => {
-            uniforms.iTime.value = clock.getElapsedTime();
+        const renderLoop = (timestamp) => {
+            clock.update(timestamp);
+            uniforms.iTime.value = clock.getElapsed();
 
             if (interactive) {
                 currentMouseRef.current.lerp(targetMouseRef.current, mouseDamping);
@@ -445,6 +447,7 @@ export default function FloatingLines({
             geometry.dispose();
             material.dispose();
             renderer.dispose();
+            clock.disconnect();
             if (renderer.domElement.parentElement) {
                 renderer.domElement.parentElement.removeChild(renderer.domElement);
             }

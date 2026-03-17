@@ -3,10 +3,10 @@
  * Extracts event details from raw text using Google Gemini API
  */
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 /**
- * Extract event details from raw text using Gemini AI
+ * Extract event details from raw text using Gemini AI (via backend proxy)
  * @param {string} rawText - The raw text to parse (college notice, assignment details, etc.)
  * @returns {Promise<Object>} Extracted event details
  */
@@ -16,11 +16,7 @@ export const extractEventFromText = async (rawText) => {
       throw new Error('Please paste some text to parse');
     }
 
-    if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-      throw new Error('Gemini API key not configured. Please add VITE_GEMINI_API_KEY to .env.local');
-    }
-
-    console.log('🤖 Extracting event details from text using Gemini...');
+    console.log('🤖 Extracting event details from text using Gemini via backend...');
 
     const prompt = `You are an expert at extracting event information from college notices, assignment sheets, and academic notifications.
 
@@ -42,35 +38,26 @@ Important rules:
 Text to parse:
 ${rawText}`;
 
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent', {
+    const response = await fetch(`${BACKEND_URL}/api/extract-event`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              {
-                text: prompt,
-              },
-            ],
-          },
-        ],
-      }),
+      body: JSON.stringify({ rawText }),
     });
 
     if (!response.ok) {
-      throw new Error(`Gemini API error: ${response.status}`);
+      const errBody = await response.text();
+      throw new Error(`Backend Gemini proxy error: ${response.status} - ${errBody}`);
     }
 
     const result = await response.json();
 
-    if (!result.candidates || result.candidates.length === 0) {
-      throw new Error('No response from Gemini API');
+    if (!result.success || !result.text) {
+      throw new Error(result.error || 'No response from backend Gemini proxy');
     }
 
-    const responseText = result.candidates[0].content.parts[0].text;
+    const responseText = result.text.trim();
     
     // Clean up response (remove markdown code blocks if present)
     let jsonText = responseText.trim();
