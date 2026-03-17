@@ -1,0 +1,181 @@
+{
+  "mockEvents": [
+    {
+      "eventId": "evt-001-uuid-12345",
+      "studentId": "std-001-uuid-67890",
+      "phoneNumber": "+917975091087",
+      "studentEmail": "navas@college.edu",
+      "studentName": "Navas",
+      "title": "MidTerm Exam - Mathematics",
+      "date": "2026-04-15",
+      "time": "10:00",
+      "description": "Comprehensive midterm exam covering chapters 1-5. Syllabus: Calculus, Linear Algebra, Probability",
+      "timestamp": "2026-03-17T10:30:00.000Z",
+      "source": "campusflow-backend"
+    },
+    {
+      "eventId": "evt-002-uuid-54321",
+      "studentId": "std-001-uuid-67890",
+      "phoneNumber": "+917975091087",
+      "studentEmail": "navas@college.edu",
+      "studentName": "Navas",
+      "title": "Programming Assignment - Data Structures",
+      "date": "2026-03-25",
+      "time": "23:59",
+      "description": "Implement Binary Search Tree with insertion, deletion, and traversal. Submit via GitHub",
+      "timestamp": "2026-03-17T11:15:00.000Z",
+      "source": "campusflow-backend"
+    },
+    {
+      "eventId": "evt-003-uuid-abcde",
+      "studentId": "std-002-uuid-fghij",
+      "phoneNumber": "+919876543210",
+      "studentEmail": "priya@college.edu",
+      "studentName": "Priya Sharma",
+      "title": "Final Project Submission - Web Development",
+      "date": "2026-05-01",
+      "time": "17:00",
+      "description": "Final project submission for Web Development course. Must include documentation and deployment link",
+      "timestamp": "2026-03-17T12:00:00.000Z",
+      "source": "campusflow-backend"
+    },
+    {
+      "eventId": "evt-004-uuid-klmno",
+      "studentId": "std-003-uuid-pqrst",
+      "phoneNumber": "+918765432109",
+      "studentEmail": "raj@college.edu",
+      "studentName": "Raj Kumar",
+      "title": "Seminar - Cloud Computing",
+      "date": "2026-03-22",
+      "time": "14:30",
+      "description": "Guest lecture on AWS and cloud architecture fundamentals. Attendance mandatory",
+      "timestamp": "2026-03-17T09:45:00.000Z",
+      "source": "campusflow-backend"
+    }
+  ],
+
+  "frontendMockPayload": {
+    "title": "Database Design Assignment",
+    "date": "2026-03-30",
+    "time": "18:00",
+    "description": "Design a normalized database schema for an e-commerce platform. Include ER diagram",
+    "phoneNumber": "+917975091087",
+    "studentName": "Navas",
+    "studentEmail": "navas@college.edu",
+    "timestamp": "2026-03-17T15:20:00.000Z",
+    "source": "campusflow-frontend"
+  },
+
+  "n8nWebhookPayloads": {
+    "eventCreation": {
+      "eventId": "evt-005-uuid-uvwxy",
+      "studentId": "std-001-uuid-67890",
+      "phoneNumber": "+917975091087",
+      "studentEmail": "navas@college.edu",
+      "title": "Quiz - Operating Systems",
+      "date": "2026-03-20",
+      "time": "11:00",
+      "description": "Online quiz on process management and memory management. 30 questions, 1 hour duration",
+      "timestamp": "2026-03-17T14:00:00.000Z",
+      "source": "campusflow-backend"
+    },
+
+    "whatsappReminder": {
+      "phoneNumber": "+917975091087",
+      "studentName": "Navas",
+      "title": "MidTerm Exam - Mathematics",
+      "date": "2026-04-15",
+      "time": "10:00",
+      "hoursUntilDeadline": 24,
+      "message": "📌 Reminder: Your MidTerm Exam - Mathematics is coming up today at 10:00 AM. Good luck! 🎓",
+      "timestamp": "2026-04-14T10:00:00.000Z"
+    },
+
+    "calendarSync": {
+      "studentEmail": "navas@college.edu",
+      "title": "MidTerm Exam - Mathematics",
+      "description": "Comprehensive midterm exam covering chapters 1-5. Syllabus: Calculus, Linear Algebra, Probability",
+      "startTime": "2026-04-15T10:00:00Z",
+      "endTime": "2026-04-15T12:00:00Z",
+      "location": "Main Campus - Room 101",
+      "reminders": [
+        {
+          "type": "notification",
+          "minutes": 1440
+        }
+      ]
+    }
+  },
+
+  "curlTestCommands": {
+    "postEvent": "curl -X POST http://localhost:5000/api/events -H 'Content-Type: application/json' -d '{\"studentId\":\"std-001-uuid-67890\",\"title\":\"Test Event\",\"date\":\"2026-03-25\",\"time\":\"14:00\",\"description\":\"Testing event creation\",\"phoneNumber\":\"+917975091087\",\"studentEmail\":\"test@college.edu\"}'",
+    
+    "n8nWebhook": "curl -X POST https://muhammadnavas.app.n8n.cloud/webhook/reminder -H 'Content-Type: application/json' -d '{\"eventId\":\"evt-test-001\",\"studentId\":\"std-001\",\"phoneNumber\":\"+917975091087\",\"studentEmail\":\"test@college.edu\",\"title\":\"Test Event\",\"date\":\"2026-03-25\",\"time\":\"14:00\",\"description\":\"Testing n8n webhook\",\"timestamp\":\"2026-03-17T15:00:00.000Z\",\"source\":\"campusflow-backend\"}'",
+
+    "healthCheck": "curl -X GET http://localhost:5000/api/health"
+  },
+
+  "testScenarios": {
+    "scenario1_NewStudent": {
+      "description": "New student registration and first event creation",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Register student",
+          "endpoint": "/api/register",
+          "payload": {
+            "name": "Navas",
+            "email": "navas@college.edu",
+            "phoneNumber": "+917975091087"
+          }
+        },
+        {
+          "step": 2,
+          "action": "Create first event",
+          "endpoint": "/api/events",
+          "payload": {
+            "studentId": "std-001-uuid-67890",
+            "title": "First Assignment",
+            "date": "2026-03-25",
+            "time": "23:59",
+            "description": "Initial assignment submission",
+            "phoneNumber": "+917975091087",
+            "studentEmail": "navas@college.edu"
+          }
+        }
+      ]
+    },
+
+    "scenario2_MultipleEvents": {
+      "description": "Student with multiple upcoming events",
+      "events": [
+        {
+          "title": "Quiz 1 - DSA",
+          "date": "2026-03-20",
+          "time": "10:00"
+        },
+        {
+          "title": "Assignment Submission",
+          "date": "2026-03-22",
+          "time": "17:00"
+        },
+        {
+          "title": "Exam - Database",
+          "date": "2026-03-28",
+          "time": "14:00"
+        }
+      ]
+    },
+
+    "scenario3_ReminderTesting": {
+      "description": "Test WhatsApp reminder workflow",
+      "eventDueIn24Hours": {
+        "title": "Important Exam",
+        "date": "2026-03-18",
+        "time": "10:00",
+        "createdAt": "2026-03-17T10:00:00.000Z",
+        "reminderScheduledFor": "2026-03-18T09:00:00.000Z"
+      }
+    }
+  }
+}
