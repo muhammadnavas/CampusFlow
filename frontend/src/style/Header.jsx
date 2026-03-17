@@ -1,159 +1,157 @@
+import { useState } from 'react';
+
 export default function Header({ onPageChange, currentPage, student, onLogout }) {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
     const handleNavClick = (page) => {
         onPageChange?.(page);
+        setMobileMenuOpen(false);
     };
 
-    return (
-        <header style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 50,
-        }}>
-            <div style={{
-                margin: '16px',
-                borderRadius: '16px',
-                border: '1px solid rgba(100, 80, 180, 0.15)',
-                background: 'rgba(10, 8, 25, 0.6)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(130,100,255,0.08)',
-            }}>
-                {/* Inner row — all inline flex */}
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '10px 24px',
-                }}>
+    const navItems = [
+        { label: 'Home', page: 'home' },
+        { label: 'Event Inbox', page: 'inbox' },
+        { label: 'Dashboard', page: 'dashboard' }
+    ];
 
+    return (
+        <header className="fixed top-0 left-0 right-0 z-50">
+            {/* Main header container */}
+            <div className="mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-purple-900/15 bg-slate-950/60 backdrop-blur-2xl shadow-lg shadow-black/50" 
+                 style={{
+                     boxShadow: '0 4px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(130,100,255,0.08)',
+                 }}>
+                
+                {/* Header content */}
+                <div className="flex items-center justify-between px-4 md:px-6 py-2.5 md:py-3">
+                    
                     {/* Logo / Brand */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }} onClick={() => handleNavClick('home')}>
-                        <span style={{
-                            fontSize: '1.4rem',
-                        }}>
-                            🎓
+                    <div 
+                        className="flex items-center gap-2 md:gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => handleNavClick('home')}
+                    >
+                        <span className="text-2xl md:text-3xl">🎓</span>
+                        <span className="text-lg md:text-2xl font-bold text-white whitespace-nowrap">
+                            CampusFlow
                         </span>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-                            <span style={{
-                                fontSize: '1.6rem',
-                                fontWeight: 700,
-                                color: 'white',
-                                letterSpacing: '-0.03em',
-                                lineHeight: 1,
-                            }}>
-                                CampusFlow
-                            </span>
-                        </div>
                     </div>
 
-                    {/* Nav links */}
-                    <nav style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
-                        {[
-                            { label: 'Home', page: 'home' },
-                            { label: 'Event Inbox', page: 'inbox' },
-                            { label: 'Dashboard', page: 'dashboard' }
-                        ].map(({ label, page }) => (
+                    {/* Desktop Navigation */}
+                    <nav className="hidden md:flex items-center gap-6 lg:gap-10">
+                        {navItems.map(({ label, page }) => (
                             <button
                                 key={page}
                                 onClick={() => handleNavClick(page)}
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    color: currentPage === page ? '#a78bfa' : 'rgba(255,255,255,0.55)',
-                                    textDecoration: 'none',
-                                    fontSize: '0.875rem',
-                                    fontWeight: currentPage === page ? 600 : 500,
-                                    transition: 'color 0.2s',
-                                    whiteSpace: 'nowrap',
-                                    cursor: 'pointer',
-                                    padding: '8px 0',
-                                    borderBottom: currentPage === page ? '2px solid #a78bfa' : '2px solid transparent',
-                                }}
-                                onMouseEnter={e => {
-                                    if (currentPage !== page) {
-                                        e.target.style.color = 'white';
-                                    }
-                                }}
-                                onMouseLeave={e => {
-                                    if (currentPage !== page) {
-                                        e.target.style.color = 'rgba(255,255,255,0.55)';
-                                    }
-                                }}
+                                className={`text-sm lg:text-base font-medium transition-colors duration-200 pb-2 border-b-2 whitespace-nowrap ${
+                                    currentPage === page
+                                        ? 'text-purple-300 border-purple-300'
+                                        : 'text-white/50 border-transparent hover:text-white'
+                                }`}
                             >
                                 {label}
                             </button>
                         ))}
                     </nav>
 
-                    {/* Right side buttons */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* Right side - Desktop buttons */}
+                    <div className="hidden md:flex items-center gap-2 lg:gap-3">
                         {/* Student info */}
                         {student && (
-                            <span style={{
-                                fontSize: '0.8rem',
-                                color: 'rgba(255,255,255,0.55)',
-                                paddingRight: '12px',
-                                borderRight: '1px solid rgba(255,255,255,0.1)',
-                            }}>
+                            <span className="text-xs lg:text-sm text-white/50 pr-3 lg:pr-4 border-r border-white/10 whitespace-nowrap">
                                 👤 {student.name}
                             </span>
                         )}
 
-                        {/* Action button */}
-                        <button style={{
-                            background: currentPage === 'inbox' ? 'linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)' : 'linear-gradient(135deg, #7c3aed, #4f46e5)',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '10px',
-                            padding: '8px 20px',
-                            fontSize: '0.875rem',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            boxShadow: '0 2px 12px rgba(124,58,237,0.35)',
-                            transition: 'opacity 0.2s',
-                            flexShrink: 0,
-                        }}
+                        {/* Add Event button */}
+                        <button
                             onClick={() => handleNavClick('inbox')}
-                            onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-                            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                            className={`px-3 lg:px-5 py-2 text-sm lg:text-base font-semibold rounded-lg transition-all duration-200 whitespace-nowrap ${
+                                currentPage === 'inbox'
+                                    ? 'bg-gradient-to-r from-purple-400 to-purple-600 shadow-lg shadow-purple-600/50'
+                                    : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-lg hover:shadow-purple-600/30'
+                            } text-white`}
                         >
                             + Add Event
                         </button>
 
                         {/* Logout button */}
                         {student && (
-                            <button style={{
-                                background: 'transparent',
-                                color: 'rgba(255,255,255,0.55)',
-                                border: '1px solid rgba(255,255,255,0.2)',
-                                borderRadius: '8px',
-                                padding: '6px 14px',
-                                fontSize: '0.8rem',
-                                fontWeight: 500,
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                flexShrink: 0,
-                            }}
+                            <button
                                 onClick={onLogout}
-                                onMouseEnter={e => {
-                                    e.target.style.background = 'rgba(239, 68, 68, 0.1)';
-                                    e.target.style.color = '#fca5a5';
-                                    e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.target.style.background = 'transparent';
-                                    e.target.style.color = 'rgba(255,255,255,0.55)';
-                                    e.target.style.borderColor = 'rgba(255,255,255,0.2)';
-                                }}
+                                className="px-3 lg:px-4 py-2 text-sm lg:text-base font-medium text-white/50 border border-white/20 rounded-lg transition-all duration-200 hover:text-red-300 hover:border-red-400/30 hover:bg-red-500/5 whitespace-nowrap"
                             >
                                 🚪 Logout
                             </button>
                         )}
                     </div>
 
+                    {/* Mobile menu button */}
+                    <button
+                        className="md:hidden flex flex-col items-center justify-center w-10 h-10 rounded-lg hover:bg-white/5 transition-colors"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <div className="w-6 h-5 flex flex-col justify-between">
+                            <span className={`h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+                            <span className={`h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+                            <span className={`h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+                        </div>
+                    </button>
                 </div>
+
+                {/* Mobile menu */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-purple-900/15 bg-slate-900/40">
+                        {/* Mobile navigation */}
+                        <nav className="flex flex-col">
+                            {navItems.map(({ label, page }) => (
+                                <button
+                                    key={page}
+                                    onClick={() => handleNavClick(page)}
+                                    className={`px-6 py-3 text-left text-sm font-medium transition-all duration-200 border-l-2 ${
+                                        currentPage === page
+                                            ? 'bg-purple-600/10 text-purple-300 border-purple-300'
+                                            : 'text-white/60 border-transparent hover:bg-white/5 hover:text-white'
+                                    }`}
+                                >
+                                    {label}
+                                </button>
+                            ))}
+                        </nav>
+
+                        {/* Mobile action buttons */}
+                        <div className="flex flex-col gap-2 p-4 border-t border-purple-900/15">
+                            {/* Student info for mobile */}
+                            {student && (
+                                <div className="text-xs text-white/50 px-2 py-1">
+                                    👤 {student.name}
+                                </div>
+                            )}
+
+                            {/* Add Event button - mobile */}
+                            <button
+                                onClick={() => handleNavClick('inbox')}
+                                className={`w-full px-4 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
+                                    currentPage === 'inbox'
+                                        ? 'bg-gradient-to-r from-purple-400 to-purple-600'
+                                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-lg hover:shadow-purple-600/30'
+                                } text-white`}
+                            >
+                                + Add Event
+                            </button>
+
+                            {/* Logout button - mobile */}
+                            {student && (
+                                <button
+                                    onClick={onLogout}
+                                    className="w-full px-4 py-2.5 text-sm font-medium text-white/50 border border-white/20 rounded-lg transition-all duration-200 hover:text-red-300 hover:border-red-400/30 hover:bg-red-500/5"
+                                >
+                                    🚪 Logout
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </header>
     );

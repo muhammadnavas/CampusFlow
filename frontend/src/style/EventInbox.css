@@ -2,7 +2,7 @@
 
 .event-inbox-container {
   min-height: 100vh;
-  padding: 40px 20px;
+  padding: clamp(20px, 5vw, 40px) clamp(10px, 3vw, 20px);
 }
 
 .event-inbox-card {
@@ -10,8 +10,8 @@
   margin: 0 auto;
   background: rgba(10, 8, 25, 0.55);
   border: 1px solid rgba(124, 58, 237, 0.3);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: clamp(16px, 4vw, 20px);
+  padding: clamp(20px, 5vw, 40px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }
@@ -19,24 +19,26 @@
 /* Header */
 .inbox-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: clamp(24px, 8vw, 40px);
 }
 
 .inbox-header h1 {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 800;
-  margin: 0 0 15px;
+  margin: 0 0 clamp(10px, 3vw, 15px);
   background: linear-gradient(135deg, #ffffff 0%, #a78bfa 50%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1.2;
 }
 
 .inbox-header p {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
   color: rgba(255, 255, 255, 0.6);
-  margin: 0 0 15px;
+  margin: 0 0 clamp(10px, 3vw, 15px);
   line-height: 1.6;
+  padding: 0 clamp(10px, 3vw, 20px);
 }
 
 .student-info-badge {
@@ -44,11 +46,11 @@
   background: rgba(124, 58, 237, 0.15);
   border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.85rem;
+  padding: clamp(6px, 1.5vw, 8px) clamp(12px, 2vw, 16px);
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
   color: #a78bfa;
   font-weight: 500;
-  margin-top: 15px;
+  margin-top: clamp(10px, 3vw, 15px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

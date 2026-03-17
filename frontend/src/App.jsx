@@ -107,7 +107,7 @@ function App() {
       />
 
       {/* Page content sits above the background */}
-      <div style={{ position: 'relative', zIndex: 1, paddingTop: '80px' }}>
+      <div className="relative z-10 pt-20 md:pt-24 px-4 md:px-6">
         {currentPage === 'home' && <HomePage />}
         {currentPage === 'inbox' && <EventInbox student={registeredStudent} />}
         {currentPage === 'dashboard' && <Dashboard student={registeredStudent} />}
