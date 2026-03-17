@@ -95,36 +95,17 @@ export const getStudentEvents = async (studentId) => {
 };
 
 /**
- * Send event to n8n webhook for processing
+ * Send event to automation (via backend which sends to n8n)
  * @param {string} studentId - Student ID
  * @param {Object} eventData - Event details
- * @returns {Promise<Object>} Response from n8n
+ * @returns {Promise<Object>} Response from backend
  */
 export const sendEventToAutomation = async (studentId, eventData) => {
   try {
-    // First save to backend
+    // Save to backend (backend will send to n8n webhook)
     const backendResult = await createEvent(studentId, eventData);
-
-    // Then send to n8n webhook
-    const n8nWebhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || 'http://localhost:5678/webhook/campusflow';
     
-    const response = await fetch(n8nWebhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventId: backendResult.eventId,
-        ...eventData,
-        timestamp: new Date().toISOString(),
-        source: 'campusflow-frontend',
-      }),
-    });
-
-    if (!response.ok) {
-      console.warn('⚠️ n8n webhook may have failed:', response.status);
-    }
-
+    console.log('✅ Event saved to database and queued for automation');
     return backendResult;
 
   } catch (error) {

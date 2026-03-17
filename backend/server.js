@@ -187,6 +187,25 @@ app.post('/api/events', async (req, res) => {
       throw eventError;
     }
 
+    // Send to n8n webhook (fire and forget, don't block response)
+    const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+    if (n8nWebhookUrl) {
+      fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: event.id,
+          studentId: studentId,
+          title: event.title,
+          date: event.date,
+          time: event.time,
+          description: event.description,
+          timestamp: new Date().toISOString(),
+          source: 'campusflow-backend',
+        }),
+      }).catch(err => console.warn('⚠️ n8n webhook call failed:', err.message));
+    }
+
     res.status(201).json({
       success: true,
       message: 'Event created successfully',
