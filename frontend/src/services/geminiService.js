@@ -3,7 +3,11 @@
  * Extracts event details from raw text using Google Gemini API
  */
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.VITE_BACKEND_URL
+    ? `${import.meta.env.VITE_BACKEND_URL}/api`
+    : 'http://localhost:5000/api');
 
 /**
  * Extract event details from raw text using Gemini AI (via backend proxy)
@@ -38,7 +42,7 @@ Important rules:
 Text to parse:
 ${rawText}`;
 
-    const response = await fetch(`${BACKEND_URL}/api/extract-event`, {
+    const response = await fetch(`${API_BASE_URL}/extract-event`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
