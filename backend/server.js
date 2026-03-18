@@ -343,9 +343,13 @@ app.post('/api/extract-event', async (req, res) => {
       return res.status(400).json({ error: 'rawText missing' });
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey =
+      process.env.OPENROUTER_API_KEY ||
+      process.env.OPEN_ROUTER_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: 'OpenRouter API key is not configured on backend' });
+      return res.status(500).json({
+        error: 'OpenRouter API key is not configured on backend. Set OPENROUTER_API_KEY in deployment environment variables.'
+      });
     }
 
     const prompt = `You are an expert at extracting event information from college notices, assignment sheets, and academic notifications.\n\nExtract the following information from the provided text and return ONLY a valid JSON object (no markdown, no extra text):\n{\n  \"title\": \"event name/title\",\n  \"date\": \"YYYY-MM-DD format\",\n  \"time\": \"HH:MM format (24-hour)\",\n  \"description\": \"detailed description of the event\"\n}\n\nImportant rules:\n- If date is relative (e.g., \"next Monday\"), calculate the actual date\n- Extract submission deadline or exam date if mentioned\n- If time is not explicitly mentioned, use \"09:00\" as default\n- Keep description concise but informative\n- Return ONLY valid JSON, nothing else\n\nText to parse:\n${rawText}`;
